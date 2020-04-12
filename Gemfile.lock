@@ -14,6 +14,7 @@ GEM
     excon (0.73.0)
     ice_nine (0.11.2)
     json (2.3.0)
+    redis (4.1.3)
     telegram_bot (0.0.8)
       excon (>= 0.30.0)
       virtus (>= 1.0.0)
@@ -30,6 +31,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   json
+  redis
   telegram_bot
 
 BUNDLED WITH
