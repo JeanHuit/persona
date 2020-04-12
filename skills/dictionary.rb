@@ -16,7 +16,8 @@ class GenerateMeaning
   rescue NoMethodError
     puts 'bad word'
   rescue OpenURI::HTTPError
-    puts 'word does not exist, please try another'
+    puts 'I do not know that word'
+    return FALSE
   else
     content
   end
