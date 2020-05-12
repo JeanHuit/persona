@@ -16,9 +16,8 @@ class GenerateMeaning
   rescue NoMethodError
     puts 'bad word'
   rescue OpenURI::HTTPError
-    puts 'I do not know that word'
-    return FALSE
+    p 'I do not know that word'
   else
-    content
+    content['definitions'][0]['definition']
   end
 end
