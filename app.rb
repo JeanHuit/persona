@@ -2,6 +2,7 @@ require 'telegram_bot'
 require 'dotenv'
 require 'redis'
 require_relative './skills/dictionary'
+require_relative './skills/news'
 
 Dotenv.load
 
@@ -14,6 +15,7 @@ bot.get_updates(fail_silently: true) do |message|
   last_word = Redis.new(host: 'localhost')
 
   get_meaning = GenerateMeaning.new
+  news_headlines = GenerateNews.new
 
   message.reply do |reply|
     case command
@@ -22,6 +24,8 @@ bot.get_updates(fail_silently: true) do |message|
     when /define/i
       last_word.set('comm', command)
       reply.text = 'What word do you want my help with?'
+    when /headlines/i
+      reply.text = news_headlines.receive_headlines
     when /stop/i
       reply.text = 'See you later'
     else
