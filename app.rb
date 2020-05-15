@@ -1,9 +1,10 @@
 require 'telegram/bot'
 require 'dotenv'
 require 'redis'
+require 'net/http/persistent'
 require_relative './skills/dictionary'
 require_relative './skills/news'
-require 'net/http/persistent'
+
 
 Dotenv.load
 

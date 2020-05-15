@@ -25,12 +25,14 @@ class GenerateNews
 
   def rss_feed
     news_feed = Hash.new
+    number = 0
     url = 'https://cdn.ghanaweb.com/feed/newsfeed.xml'
     feed = RSS::Parser.parse(URI.open(url).read)
     puts "Title: #{feed.channel.title}"
     feed.items.each do |item|
-      news_feed[item.title.to_s] = item.description.to_s
+      news_feed[number] = item.title.to_s + "\n" + item.description.to_s + "\n" + item.link.to_s
+      number += 1
     end
-    news_feed.inspect
+    news_feed[1]
   end
 end
