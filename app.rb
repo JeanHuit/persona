@@ -1,43 +1,45 @@
-require 'telegram_bot'
+require 'telegram/bot'
 require 'dotenv'
 require 'redis'
 require_relative './skills/dictionary'
 require_relative './skills/news'
+require 'net/http/persistent'
 
 Dotenv.load
 
-bot = TelegramBot.new(token: ENV['token'])
+token = ENV['token']
 
-bot.get_updates(fail_silently: true) do |message|
-  puts "@#{message.from.username}: #{message.text}"
-  command = message.get_command_for(bot)
+Telegram::Bot.configure do |config|
+  config.adapter = :net_http_persistent
+end
 
-  last_word = Redis.new(host: 'localhost')
+last_word = Redis.new(host: 'localhost')
+get_meaning = GenerateMeaning.new
+worldheadlines = GenerateNews.new
+rss_feed = GenerateNews.new
 
-  get_meaning = GenerateMeaning.new
-  news_headlines = GenerateNews.new
-
-  message.reply do |reply|
-    case command
-    when /start/i
-      reply.text = "Hello, #{message.from.first_name}!"
-    when /define/i
-      last_word.set('comm', command)
-      reply.text = 'What word do you want my help with?'
-    when /headlines/i
-      reply.text = news_headlines.receive_headlines
-    when /stop/i
-      reply.text = 'See you later'
+Telegram::Bot::Client.run(token) do |bot|
+  bot.listen do |message|
+    case message.text
+    when '/start'
+      bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
+    when '/define'
+      last_word.set('comm', message.text)
+      bot.api.send_message(chat_id: message.chat.id, text: 'What word do you want my help with?')
+    when '/headlines'
+      bot.api.send_message(chat_id: message.chat.id, text: rss_feed.rss_feed)
+    when '/worldheadlines'
+      bot.api.send_message(chat_id: message.chat.id, text: worldheadlines.newsapi)
+    when '/stop'
+      bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     else
-      case command
-      when last_word.get('comm') == '/define' && command
-        reply.text = get_meaning.meaning(command)
+      case message.text
+      when last_word.get('comm') == '/define' && message.text
+        bot.api.send_message(chat_id: message.chat.id, text: get_meaning.meaning(message.text)) 
         last_word.set('comm', 'done')
       else
-        reply.text = "#{message.from.first_name}, have no idea what #{command.inspect} means in this context, use: /help"
+        bot.api.send_message(chat_id: message.chat.id, text: " have no idea what #{message.inspect} means in this context, use: /help")
       end
     end
-    puts "sending #{reply.text.inspect} to @#{message.from.username}"
-    reply.send_with(bot)
   end
 end
