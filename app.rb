@@ -16,7 +16,6 @@ end
 
 last_word = Redis.new(host: 'localhost')
 get_meaning = GenerateMeaning.new
-worldheadlines = GenerateNews.new
 rss_feed = GenerateNews.new
 
 Telegram::Bot::Client.run(token) do |bot|
@@ -29,8 +28,6 @@ Telegram::Bot::Client.run(token) do |bot|
       bot.api.send_message(chat_id: message.chat.id, text: 'What word do you want my help with?')
     when '/headlines'
       bot.api.send_message(chat_id: message.chat.id, text: rss_feed.rss_feed)
-    when '/worldheadlines'
-      bot.api.send_message(chat_id: message.chat.id, text: worldheadlines.newsapi)
     when '/stop'
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     else
