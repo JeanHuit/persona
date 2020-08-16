@@ -4,7 +4,6 @@ require 'dotenv'
 require 'rss'
 
 Dotenv.load
-# Class for finding the worldnews
 class GenerateNews
 
   def rss_feed
@@ -12,7 +11,8 @@ class GenerateNews
     news_feed = []
     number = 0
     url = 'https://cdn.ghanaweb.com/feed/newsfeed.xml'
-    feed = RSS::Parser.parse(URI.open(url).read)
+  # rescue RSS::NotAvailableValueError
+    feed = RSS::Parser.parse(URI.open(url).read, validate: false)
     puts "Title: #{feed.channel.title}"
     feed.items.each do |item|
       news_feed[number] = '*' + item.title.to_s
