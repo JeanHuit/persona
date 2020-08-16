@@ -6,9 +6,6 @@ require 'rss'
 Dotenv.load
 # Class for finding the worldnews
 class GenerateNews
-  time_parameter = Time.now
-  @time_ = time_parameter.year.to_s + '-' + time_parameter.month.to_s + '-' +
-           time_parameter.day.to_s
 
   def rss_feed
     ness = []
