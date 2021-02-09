@@ -11,7 +11,7 @@ class GenerateNews
     news_feed = []
     number = 0
     url = 'https://cdn.ghanaweb.com/feed/newsfeed.xml'
-  # rescue RSS::NotAvailableValueError
+    #rescue RSS::NotAvailableValueError
     feed = RSS::Parser.parse(URI.open(url).read, validate: false)
     puts "Title: #{feed.channel.title}"
     feed.items.each do |item|
