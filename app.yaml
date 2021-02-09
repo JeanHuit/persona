@@ -1,6 +1,6 @@
 runtime: ruby27
 env: standard
-entrypoint: ruby app.rb
+entrypoint: bundle install , ruby app.rb
 
 # This sample incurs costs to run on the App Engine flexible environment.
 # The settings below are to reduce costs during testing and are not appropriate
