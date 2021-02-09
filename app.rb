@@ -8,7 +8,7 @@ require_relative './skills/news'
 
 Dotenv.load
 
-token = ENV['token']
+token = ENV['_TOKEN']
 
 Telegram::Bot.configure do |config|
   config.adapter = :net_http_persistent
