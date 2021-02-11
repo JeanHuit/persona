@@ -14,7 +14,7 @@ Telegram::Bot.configure do |config|
   config.adapter = :net_http_persistent
 end
 
-last_word = Redis.new(host: '127.0.0.1')
+last_word = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 get_meaning = GenerateMeaning.new
 rss_feed = GenerateNews.new
 
