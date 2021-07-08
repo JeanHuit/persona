@@ -39,12 +39,17 @@ Telegram::Bot::Client.run(token) do |bot|
     else
       case message.text
       when last_word.get('comm') == '/define' && message.text
-        bot.api.send_message(chat_id: message.chat.id, text: get_meaning.meaning(message.text)) 
+        bot.api.send_message(chat_id: message.chat.id, text: get_meaning.meaning(message.text))
         last_word.set('comm', 'done')
       when last_word.get('comm') == '/chat' && message.text
-        bot.api.send_message(chat_id: message.chat.id, text: talk.converse(message.text))
+        if message.text == '/stop'
+          last_word.set('comm', message.text)
+          bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
+        else
+          bot.api.send_message(chat_id: message.chat.id, text: talk.converse(message.text))
+        end
       else
-        bot.api.send_message(chat_id: message.chat.id, text: " have no idea what #{message.inspect} means in this context, use: /help")
+        bot.api.send_message(chat_id: message.chat.id, text: "I have no idea what #{message.inspect} means in this context, use: /help")
       end
     end
   end
