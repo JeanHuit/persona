@@ -49,7 +49,7 @@ Telegram::Bot::Client.run(token) do |bot|
           bot.api.send_message(chat_id: message.chat.id, text: talk.converse(message.text))
         end
       else
-        bot.api.send_message(chat_id: message.chat.id, text: "I have no idea what #{message.inspect} means in this context, use: /help")
+        bot.api.send_message(text: "I have no idea what #{message.inspect} means in this context, use: /help")
       end
     end
   end
