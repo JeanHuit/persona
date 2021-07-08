@@ -21,6 +21,8 @@ class BeginConversation
     key = ENV['chat_key']
     url = "https://www.personalityforge.com/api/chat/?apiKey=#{key}&chatBotID=#{choosebot}&message=#{chat}&externalID=ntikuma07"
     content = JSON.parse(URI.open(url).string)
+  rescue URI::InvalidURIError
+    p 'This is not a valid message, use your words'
   rescue NoMethodError
     p 'This is an unacceptable use of the English Language'
   rescue => e
