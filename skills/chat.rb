@@ -22,7 +22,7 @@ class BeginConversation
     url = "https://www.personalityforge.com/api/chat/?apiKey=#{key}&chatBotID=#{choosebot}&message=#{chat}&externalID=ntikuma07"
     content = JSON.parse(URI.open(url).string)
   rescue NoMethodError
-    puts 'this is not right'
+    p 'This is an unacceptable use of the English Language'
   rescue => e
     print_exception(e, false)
   else
