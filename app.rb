@@ -37,7 +37,7 @@ Telegram::Bot::Client.run(token) do |bot|
       last_word.set('comm', message.text)
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
     else
-      case message.text
+      case message&.text
       when last_word.get('comm') == '/define' && message.text
         bot.api.send_message(chat_id: message.chat.id, text: get_meaning.meaning(message.text))
         last_word.set('comm', 'done')
