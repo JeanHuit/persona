@@ -1,7 +1,7 @@
 require 'telegram/bot'
 require 'dotenv'
 require 'redis'
-require 'net/http/persistent'
+# require 'net/http/persistent'
 require_relative './skills/dictionary'
 require_relative './skills/news'
 require_relative './skills/chat'
@@ -11,9 +11,9 @@ Dotenv.load
 
 token = ENV['_TOKEN']
 
-Telegram::Bot.configure do |config|
-  config.adapter = :net_http_persistent
-end
+# Telegram::Bot.configure do |config|
+#   config.adapter = :net_http_persistent
+# end
 
 last_word = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 get_meaning = GenerateMeaning.new
@@ -22,7 +22,6 @@ talk = BeginConversation.new
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
-    id = message.chat.id
     case message&.text
     when '/start'
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
@@ -50,7 +49,7 @@ Telegram::Bot::Client.run(token) do |bot|
           bot.api.send_message(chat_id: message.chat.id, text: talk.converse(message.text))
         end
       else
-        bot.api.send_message(chat_id: id, text: "I have no idea what #{message.inspect} means in this context, use: /help")
+        bot.api.send_message(chat_id: message.chat.id, text: "I have no idea what #{message.inspect} means in this context, use: /help")
       end
     end
   end
