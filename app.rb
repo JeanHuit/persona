@@ -22,6 +22,7 @@ talk = BeginConversation.new
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
+    id = message.chat.id
     case message&.text
     when '/start'
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
@@ -49,7 +50,7 @@ Telegram::Bot::Client.run(token) do |bot|
           bot.api.send_message(chat_id: message.chat.id, text: talk.converse(message.text))
         end
       else
-        bot.api.send_message(text: "I have no idea what #{message.inspect} means in this context, use: /help")
+        bot.api.send_message(chat_id: id, text: "I have no idea what #{message.inspect} means in this context, use: /help")
       end
     end
   end
