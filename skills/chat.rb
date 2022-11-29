@@ -10,7 +10,7 @@ Dotenv.load
 class BeginConversation
   def choosebot
     time = Time.new
-    arr = [71367, 63906, 147504, 6, 6526, 148149, 78951]
+    arr = [120170, 150246, 151242, 6, 98708, 148149, 78951]
     # arr[rand(11)]
     #  118099, 159151, 64022, 150647, 92626
     # chooses a bot based on the day
@@ -29,5 +29,6 @@ class BeginConversation
     print_exception(e, false)
   else
     content['message']['message']
+    # content.inspect
   end
 end
